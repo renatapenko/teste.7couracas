@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você ainda consegue deixar alguém entrar?</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#C94F78;
+  --pink-light:#FBE9EF;
+  --pink-dark:#8F3054;
+  --pink-deep:#3D1020;
+  --cream:#FAF7F3;
+  --white:#FFFFFF;
+  --text:#1C1015;
+  --muted:#7A6470;
+  --subtle:#C4B0B8;
+  --border:rgba(201,79,120,0.13);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:2rem 1rem 5rem}
+.wrap{width:100%;max-width:560px}
+
+/* INTRO */
+.intro{text-align:center;padding:1.5rem 0 2.5rem;animation:fadeUp .6s ease both}
+.intro .eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);font-weight:500;margin-bottom:1.1rem}
+.intro h1{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,7vw,44px);font-weight:500;line-height:1.18;margin-bottom:1.25rem;color:var(--text)}
+.intro h1 em{font-style:italic;color:var(--pink-dark)}
+.intro .lead{font-size:15px;color:var(--muted);line-height:1.75;max-width:400px;margin:0 auto 1.75rem;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:17px}
+.intro .tags{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:2rem}
+.intro .tags span{font-size:11.5px;color:var(--muted);background:var(--white);border:1px solid var(--border);border-radius:100px;padding:5px 13px}
+.btn-start{background:var(--pink);color:#fff;border:none;border-radius:100px;padding:14px 40px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .15s;letter-spacing:.01em}
+.btn-start:hover{background:var(--pink-dark);transform:translateY(-1px)}
+.intro .disclaimer{font-size:12px;color:var(--subtle);margin-top:1rem}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+.progress-track{height:2px;background:rgba(201,79,120,0.1);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--pink);border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.dim-tag{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);font-weight:500;margin-bottom:.5rem;opacity:.7}
+
+/* CARD */
+.card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:1.6rem 1.6rem 1.4rem;margin-bottom:1rem;animation:fadeUp .4s ease both}
+.question{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,4.2vw,24px);font-weight:500;line-height:1.42;color:var(--text);margin-bottom:1.4rem}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{background:var(--cream);border:1px solid transparent;border-radius:12px;padding:12px 15px;text-align:left;font-size:14px;line-height:1.55;color:var(--text);cursor:pointer;transition:all .18s ease;font-family:'DM Sans',sans-serif;width:100%}
+.opt:hover{border-color:var(--pink);background:var(--pink-light);color:var(--pink-deep)}
+.opt.selected{border-color:var(--pink);background:var(--pink-light);color:var(--pink-deep);font-weight:500}
+
+/* MICROBLOQUEIO */
+.microbreak{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:2rem 1.75rem;margin-bottom:1rem;text-align:center;animation:fadeUp .4s ease both}
+.microbreak .mb-line{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,23px);font-style:italic;font-weight:500;color:var(--pink-dark);line-height:1.5;margin-bottom:1.5rem}
+.microbreak .mb-sub{font-size:13px;color:var(--subtle);margin-bottom:1.5rem}
+
+/* NAV */
+.nav{display:flex;justify-content:space-between;align-items:center;padding-top:.25rem}
+.btn-back{background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;padding:8px 0;font-family:'DM Sans',sans-serif;transition:color .2s}
+.btn-back:hover{color:var(--text)}
+.btn-next{background:var(--pink);color:#fff;border:none;border-radius:100px;padding:11px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,opacity .2s,transform .15s}
+.btn-next:hover:not(:disabled){background:var(--pink-dark);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.28;cursor:not-allowed}
+
+/* RESULT */
+.result-section{display:none;animation:fadeUp .5s ease both}
+.result-top{text-align:center;margin-bottom:1.5rem;padding:0 .5rem}
+.result-badge{display:inline-flex;align-items:center;font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:5px 16px;border-radius:100px;margin-bottom:1rem}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,5.5vw,34px);font-weight:500;line-height:1.2;margin-bottom:.6rem}
+.result-subtitle{font-size:14px;color:var(--muted);line-height:1.65;font-style:italic}
+
+/* PRINT CARD */
+.print-card{background:var(--pink-deep);border-radius:20px;padding:1.75rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.print-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:rgba(201,79,120,.15)}
+.print-card .print-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.9rem;font-weight:500}
+.print-card .print-q1{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,3.8vw,21px);font-style:italic;color:#fff;line-height:1.55;margin-bottom:1rem;font-weight:500}
+.print-card .print-q2{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,3.2vw,18px);font-style:italic;color:rgba(255,255,255,.65);line-height:1.55;font-weight:400}
+
+/* DIMS */
+.dims-card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:1.5rem 1.6rem;margin-bottom:1rem}
+.dims-title{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem;font-weight:500}
+.dim-row{margin-bottom:1rem}
+.dim-row:last-child{margin-bottom:0}
+.dim-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.dim-name{font-size:13px;color:var(--text);font-weight:500}
+.dim-val{font-size:11.5px;color:var(--muted)}
+.dim-track{height:4px;background:rgba(201,79,120,.08);border-radius:4px;overflow:hidden}
+.dim-bar{height:100%;border-radius:4px;transition:width 1.1s cubic-bezier(.4,0,.2,1) .3s}
+
+/* NARRATIVE */
+.narrative-card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:1.5rem 1.6rem;margin-bottom:1rem}
+.narrative-card blockquote{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,3.5vw,20px);font-style:italic;line-height:1.7;color:#4a3040;margin-bottom:1.25rem;padding-left:1rem;border-left:2px solid var(--pink)}
+.signals{list-style:none;display:flex;flex-direction:column;gap:8px}
+.signals li{font-size:13.5px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;line-height:1.65}
+.signals li::before{content:"→";color:var(--pink);flex-shrink:0;font-size:12px;margin-top:2px}
+
+/* CTA */
+.cta-card{background:var(--white);border-radius:20px;border:1px solid var(--border);padding:1.75rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.cta-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;border-radius:50%;background:var(--pink-light);z-index:0}
+.cta-inner{position:relative;z-index:1}
+.cta-card .cta-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);font-weight:500;margin-bottom:.75rem}
+.cta-card h3{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,4vw,24px);font-weight:500;color:var(--text);line-height:1.35;margin-bottom:.75rem}
+.cta-card p{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:1.4rem;font-style:italic}
+.form-group{display:flex;flex-direction:column;gap:9px}
+.form-group input{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);outline:none;transition:border-color .2s}
+.form-group input:focus{border-color:var(--pink);background:var(--white)}
+.form-group input::placeholder{color:#c0a0b0}
+.btn-submit{background:var(--pink);color:#fff;border:none;border-radius:10px;padding:14px;font-size:14.5px;font-weight:500;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;transition:background .2s,transform .15s;letter-spacing:.01em}
+.btn-submit:hover{background:var(--pink-dark);transform:translateY(-1px)}
+.form-note{font-size:11.5px;color:var(--subtle);text-align:center;margin-top:.6rem}
+
+/* THANK */
+.thank-section{display:none;text-align:center;padding:3.5rem 1rem;animation:fadeUp .5s ease both}
+.thank-section .icon{font-size:40px;margin-bottom:1.25rem}
+.thank-section h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;margin-bottom:.75rem}
+.thank-section p{font-size:14.5px;color:var(--muted);line-height:1.75;max-width:360px;margin:0 auto .75rem}
+.thank-section .ig{font-size:13px;color:var(--pink);margin-top:1.5rem;font-weight:500}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){
+  .card,.dims-card,.narrative-card,.cta-card,.microbreak,.print-card{padding:1.25rem}
+  .intro h1{font-size:clamp(26px,8vw,36px)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- INTRO -->
+<div id="intro-section" class="intro">
+  <div class="eyebrow">Teste de indisponibilidade emocional</div>
+  <h1>Você quer amor.<br>Mas ainda consegue<br><em>deixar alguém entrar na sua vida?</em></h1>
+  <p class="lead">Muitas mulheres acreditam que estão esperando o amor certo.<br>Quando na verdade, sem perceber, se fecharam para ele.</p>
+  <div class="tags">
+    <span>Hipervigilância emocional</span>
+    <span>Atração por indisponíveis</span>
+    <span>Medo de intimidade</span>
+    <span>Distanciamento emocional</span>
+  </div>
+  <button class="btn-start" onclick="startQuiz()">Começar minha análise →</button>
+  <div class="disclaimer">20 perguntas · 5 minutos · resultado imediato</div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-section" style="display:none">
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span id="step-label">1 de 20</span>
+      <span id="pct-label">5%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress" style="width:5%"></div>
+    </div>
+  </div>
+  <div id="question-card" class="card">
+    <div class="dim-tag" id="dim-tag"></div>
+    <div class="question" id="question-text"></div>
+    <div class="options" id="options-container"></div>
+  </div>
+  <div id="break-card" class="microbreak" style="display:none">
+    <div class="mb-line" id="break-line"></div>
+    <div class="mb-sub" id="break-sub"></div>
+  </div>
+  <div class="nav">
+    <button class="btn-back" id="btn-back" onclick="goBack()" style="visibility:hidden">← Voltar</button>
+    <button class="btn-next" id="btn-next" onclick="goNext()" disabled>Próxima →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result-section" class="result-section">
+  <div class="result-top">
+    <div class="result-badge" id="result-badge"></div>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-subtitle" id="result-subtitle"></div>
+  </div>
+  <div class="print-card" id="print-card">
+    <div class="print-label">Para guardar · para compartilhar</div>
+    <div class="print-q1" id="print-q1"></div>
+    <div class="print-q2" id="print-q2"></div>
+  </div>
+  <div class="dims-card">
+    <div class="dims-title">Seu mapa emocional</div>
+    <div id="dim-bars"></div>
+  </div>
+  <div class="narrative-card">
+    <blockquote id="narrative-quote"></blockquote>
+    <ul class="signals" id="signals-list"></ul>
+  </div>
+  <div class="cta-card">
+    <div class="cta-inner">
+      <div class="cta-eyebrow">O próximo passo</div>
+      <h3 id="cta-title"></h3>
+      <p id="cta-body"></p>
+      <div style="background:var(--cream);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;border:1px solid var(--border)">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);font-weight:500;margin-bottom:.6rem">Travessia emocional · 7 dias</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,3.8vw,19px);font-weight:500;color:var(--text);line-height:1.4;margin-bottom:.5rem">As 7 Couraças</div>
+        <div style="font-size:13.5px;color:var(--muted);line-height:1.65">Uma experiência de 7 dias para dissolver as camadas emocionais que tornam a conexão difícil. Grupo fechado no WhatsApp. Um áudio por dia. Uma couraça por vez.</div>
+      </div>
+      <a href="https://renatapenko.github.io/pagina.vendas.7couracas/" target="_blank" class="btn-submit" style="display:block;text-align:center;text-decoration:none;">Conhecer a travessia das 7 Couraças →</a>
+    </div>
+  </div>
+</div>
+
+<!-- THANK -->
+<div id="thank-section" class="thank-section">
+  <div class="icon">💌</div>
+  <h2>Algo começa aqui.</h2>
+  <p>Nossa conversa começa agora. Te espero no WhatsApp!</p>
+  <div class="ig"><a href="https://wa.me/5567981448229?text=Voc%C3%AA%20chegou%20at%C3%A9%20aqui%20por%20um%20motivo.%0A%0AMuitas%20mulheres%20s%C3%B3%20percebem%20que%20est%C3%A3o%20emocionalmente%20indispon%C3%ADveis%20quando%20j%C3%A1%20est%C3%A3o%20cansadas%20de%20repetir%20os%20mesmos%20padr%C3%B5es.%0A%0AA%20parte%20do%20teste%20que%20mais%20mexeu%20comigo%20foi%3A" target="_blank" style="color:var(--pink);text-decoration:none;font-weight:500">👉 Me chama no WhatsApp para continuar esse processo</a></div>
+</div>
+
+</div>
+
+<script>
+const questions = [
+  // BLOCO 1 — Apego emocional
+  {dim:"Apego emocional",text:"Quando você começa a sentir que alguém está se aproximando de verdade…",opts:["Me abro — essa proximidade me faz bem","Fico animada, mas uma parte minha já se prepara para a dor","Me fecho sem querer — intimidade me deixa desconfortável","Fico dividida: quero muito e ao mesmo tempo quero sumir"],scores:{A:[0,2,3,3]}},
+  {dim:"Apego emocional",text:"Ele demora pra responder. O que acontece dentro de você?",opts:["Nada de mais — sei que ele tem a vida dele","Minha cabeça começa a criar histórias e cenários","Finjo que não me importo, mas por dentro estou abalada","Mando outra mensagem ou fico olhando o status dele"],scores:{A:[0,3,2,2]}},
+  {dim:"Apego emocional",text:"Quando você está numa relação estável e amorosa, você se sente…",opts:["Presente, segura e grata","Desconfiante — parece bom demais pra ser verdade","Inquieta — minha cabeça sempre acha algum problema","Com vontade de criar distância, mesmo sem saber por quê"],scores:{A:[0,2,2,3]}},
+  {dim:"Apego emocional",text:"Quanto mais você gosta de um homem…",opts:["Mais me aproximo e me permito ser vista","A ansiedade aumenta e não para","Mais sinto vontade de recuar e me proteger","A ansiedade já está lá antes mesmo de ele fazer algo"],scores:{A:[0,3,2,2]}},
+  {dim:"Apego emocional",text:"Você já perdeu o interesse por um homem exatamente quando percebeu que ele queria ficar de verdade?",opts:["Não — quando gosto de alguém, quero que ele fique","Sim, uma vez. Achei que era coincidência","Sim, isso já se repetiu. Reconheço esse padrão em mim","Sim, e até hoje não entendo por que isso acontece"],scores:{A:[0,1,3,3]}},
+
+  // BLOCO 2 — Padrão de atração
+  {dim:"Padrão de atração",text:"Se você olhar para os homens pelos quais se apaixonou, eles têm algo em comum?",opts:["Eram presentes e emocionalmente disponíveis","Alternavam entre muita intensidade e sumiço","Nunca estavam realmente livres — emocionalmente ou de verdade","Eram homens que eu queria mudar ou salvar"],scores:{P:[0,3,3,2]}},
+  {dim:"Padrão de atração",text:"Quando um homem está completamente disponível desde o início…",opts:["Fico feliz — é exatamente o que eu quero","Fico desconfiante — parece suspeito ou encenado","Me interesso menos — aquela chama não acende igual","Fico ansiosa, sem saber como corresponder"],scores:{P:[0,2,3,1]}},
+  {dim:"Padrão de atração",text:"A incerteza — não saber o que ele sente por você — te faz…",opts:["Sentir desconforto — prefiro conversar e ter clareza","Ficar completamente tomada tentando decifrar cada detalhe","Sentir mais atração do que quando tudo está certo e claro","Oscilar entre querer se afastar e se aproximar ainda mais"],scores:{P:[0,2,3,2]}},
+  {dim:"Padrão de atração",text:"Quando um relacionamento se torna seguro e estável, o que acontece com seu desejo por ele?",opts:["Aumenta — segurança me aproxima e me abre","Se mantém, mas às vezes sinto que falta alguma coisa","Diminui aos poucos — perco o interesse sem entender por quê","Começo a criar motivos pra ir embora"],scores:{P:[0,1,3,3]}},
+  {dim:"Padrão de atração",text:"Você já ficou meses esperando por um homem que prometia, mas nunca entregava?",opts:["Não — percebo cedo quando alguém não está disponível de verdade","Sim, por muito mais tempo do que deveria","Sim, e ficava acreditando que ia conseguir mudar aquilo","Sim, e só reconheci o padrão quando já estava machucada"],scores:{P:[0,2,3,3]}},
+
+  // BLOCO 3 — Medo de intimidade e sabotagem
+  {dim:"Intimidade e sabotagem",text:"Quando um relacionamento começa a ficar sério de verdade…",opts:["Me aprofundo — é o que eu queria","Aparecem medos que eu não sabia que tinha","Começo a criar brigas ou distância sem perceber","Começo a enxergar defeitos que antes nem existiam pra mim"],scores:{M:[0,2,3,3]}},
+  {dim:"Intimidade e sabotagem",text:"Ser completamente vista por um homem — sem máscara, sem performance — te parece…",opts:["Libertador — é o que eu mais quero num relacionamento","Assustador, mesmo sendo algo que desejo muito","Perigoso — se ele me conhecer de verdade, vai me rejeitar","Impossível — nunca me sinto realmente vista por ninguém"],scores:{M:[0,2,3,3]}},
+  {dim:"Intimidade e sabotagem",text:"Você já foi embora de um relacionamento saudável sem conseguir explicar direito o motivo?",opts:["Não — quando termino, tenho razões claras","Sim, uma vez — mas foi pontual","Sim, isso já aconteceu mais de uma vez na minha vida","Não fui embora, mas me afastei emocionalmente sem sair"],scores:{M:[0,1,3,2]}},
+  {dim:"Intimidade e sabotagem",text:"Quando ele pede compromisso, o que acontece em você?",opts:["Recebo bem — compromisso me traz segurança e paz","Fico feliz, mas surge um frio na barriga","Sinto um impulso de recuar, mesmo querendo ficar","Concordo por fora, mas emocionalmente fico com um pé fora"],scores:{M:[0,1,3,3]}},
+  {dim:"Intimidade e sabotagem",text:"Quando você imagina um amor de verdade — profundo, duradouro — para você…",opts:["Sinto desejo genuíno — é o que eu busco","Sinto esperança misturada com muito ceticismo","Sinto vontade e medo ao mesmo tempo, e um anula o outro","Duvido que isso seja possível pra mim de verdade"],scores:{M:[0,1,2,3]}},
+
+  // BLOCO 4 — Autopercepção afetiva
+  {dim:"Autopercepção afetiva",text:"Qual dessas frases mais te descreve em relacionamentos?",opts:["Consigo amar e ser amada de forma saudável","Sou boa em amar, mas difícil de ser amada","Me protejo tanto que acabo afastando quem fica","Não sei bem quem sou quando estou dentro de uma relação"],scores:{G:[0,2,3,3]}},
+  {dim:"Autopercepção afetiva",text:"Quando você está sofrendo dentro de uma relação…",opts:["Converso, coloco limites e tomo decisões","Aguento por muito tempo antes de abrir a boca","Falo, mas na prática não mudo nada — fico no mesmo lugar","Desapareço sem explicar — o silêncio sempre foi minha saída"],scores:{G:[0,2,2,3]}},
+  {dim:"Autopercepção afetiva",text:"Suas necessidades afetivas — o que você precisa emocionalmente — você…",opts:["Reconhece e consegue pedir com tranquilidade","Reconhece, mas pedir parece quase impossível","Minimiza — sempre parece que você está pedindo demais","Ignora — é mais fácil do que lidar com a resposta dele"],scores:{G:[0,1,2,3]}},
+  {dim:"Autopercepção afetiva",text:"Depender emocionalmente de um homem te parece…",opts:["Natural — consigo depender e deixar ele depender de mim","Difícil — não sei direito como aceitar cuidado","Prefiro que ele dependa de mim. Eu não dependo de ninguém.","Aterrorizante — prefiro não precisar de ninguém"],scores:{G:[0,2,2,3]}},
+  {dim:"Autopercepção afetiva",text:"Sendo completamente honesta consigo mesma — hoje você está…",opts:["Aberta e pronta para um vínculo real","Querendo estar aberta, mas sabe que ainda há bloqueios","Cheia de barreiras, mesmo sem querer ter","Com o medo falando mais alto do que o desejo"],scores:{G:[0,1,2,3]}}
+];
+
+const microbreaks = [
+  {after:4, line:"A mulher emocionalmente indisponível raramente parece fria.", sub:"Ela costuma parecer a mais forte da sala."},
+  {after:9, line:"Você não perdeu o interesse porque ele não era bom o suficiente.", sub:"Você fugiu porque ele era bom demais pra ser seguro."},
+  {after:14, line:"Você não se fechou porque quis.\nVocê se fechou para sobreviver.", sub:"Mas sobreviver e viver não são a mesma coisa."},
+  {after:19, line:"O problema nunca foi falta de amor.\nFoi não saber como deixar ele entrar.", sub:null}
+];
+
+const profiles = [
+  {
+    min:0,max:15,
+    badge:"Disponibilidade presente",badgeBg:"#EAF3DE",badgeColor:"#27500A",
+    title:"Algo em você ainda consegue se abrir — e isso importa.",
+    subtitle:"Você pode estar mais disponível do que imagina. Mas existem camadas que ainda merecem atenção.",
+    barColor:"#639922",
+    print1:"Carregar feridas não significa ser definida por elas. Você pode ter desenvolvido recursos que ainda não reconhece em si mesma.",
+    print2:"Disponibilidade emocional não é ausência de medo. É a possibilidade de se abrir mesmo quando ele aparece.",
+    quote:"Algo em você ainda consegue estar presente. Isso não é pouco — é construído. Mas existem camadas mais sutis que ainda influenciam o que você permite receber.",
+    signals:["Sua ansiedade relacional existe, mas não te paralisa completamente","Pedir o que você precisa é possível — mesmo que com esforço","Existem pontos onde sua disponibilidade ainda encontra resistência silenciosa"],
+    ctaTitle:"Você já está mais perto do que imagina.",
+    ctaBody:"Esse resultado mostrou que algo em você ainda consegue se abrir. Agora é hora de entender o que ainda trava — antes que ele feche de vez. As 7 Couraças foi criado exatamente para isso."
+  },
+  {
+    min:16,max:30,
+    badge:"Disponibilidade parcial",badgeBg:"#FAEEDA",badgeColor:"#633806",
+    title:"Você quer se relacionar. E algo em você pode estar tornando isso mais difícil do que deveria ser.",
+    subtitle:"Pode existir um conflito interno entre o desejo de amor e algo que aprendeu a se proteger.",
+    barColor:"#BA7517",
+    print1:"Não é sobre sentir demais. É sobre não conseguir se sentir segura ainda — quando alguém realmente fica.",
+    print2:"Seu sistema emocional aprendeu que amar dói. E construiu formas de se proteger que, sem querer, também te impedem de receber.",
+    quote:"Você não é fria. Você se tornou cuidadosa demais — porque já se machucou sendo diferente. Essa proteção fez sentido um dia. E hoje está custando caro.",
+    signals:["Você sente ansiedade mesmo quando está bem numa relação","Existe um padrão de atrair pessoas que confirmam uma desconfiança antiga","Intimidade real assusta — mesmo sendo o que você mais quer","Você se pergunta por que os relacionamentos raramente chegam onde você imaginou"],
+    ctaTitle:"Você quer amor. Mas algo aprendido em você ainda resiste.",
+    ctaBody:"Esse conflito tem nome. E quando você entende de onde ele vem, ele perde força. As 7 Couraças é uma experiência de 7 dias para atravessar exatamente isso — sem terapia, sem exposição, sem fórmula."
+  },
+  {
+    min:31,max:45,
+    badge:"Bloqueio afetivo ativo",badgeBg:"#FAECE7",badgeColor:"#8F3600",
+    title:"Seus mecanismos de proteção podem estar tornando a conexão mais difícil do que você gostaria.",
+    subtitle:"Hoje você pode estar funcionando através de camadas de proteção. E isso não define quem você é — define o que você aprendeu a fazer para sobreviver.",
+    barColor:"#C94F78",
+    print1:"Seu sistema emocional aprendeu a sobreviver tão bem sozinho que intimidade começou a parecer ameaça.",
+    print2:"Não é medo de ser abandonada. É medo de ser vista de verdade — e mesmo assim não ser suficiente.",
+    quote:"Você não foge do amor. Você foge do momento em que ele começa a ficar real — porque real significa que também pode ser perdido. E você já sabe demais sobre perda.",
+    signals:["Existe um padrão de atrair pessoas que não estão completamente disponíveis","Quando alguém está disponível de fato, o interesse diminui sem explicação clara","Intimidade ativa um alarme interno que você ainda não consegue nomear","Vínculos são interrompidos antes que cheguem a um ponto de vulnerabilidade real","A ansiedade nos relacionamentos virou um estado familiar"],
+    ctaTitle:"Esse padrão está te custando o amor que você quer.",
+    ctaBody:"Não dá para sair disso com força de vontade — porque a raiz é emocional, não comportamental. As 7 Couraças é uma experiência de 7 dias para você entender esse mecanismo de dentro — e começar a ter escolha de verdade."
+  },
+  {
+    min:46,max:60,
+    badge:"Indisponibilidade profunda",badgeBg:"#FBE9EF",badgeColor:"#8F3054",
+    title:"Algo em você pode ter construído um mundo onde o amor ainda não consegue pousar.",
+    subtitle:"Pode ser o padrão mais silencioso de todos. E o mais confundido com força ou independência.",
+    barColor:"#8F3054",
+    print1:"Não foi força o que fechou essa porta. Foi não ter aprendido que era seguro abrir.",
+    print2:"O amor que você quer existe. E é possível criar condições para que ele chegue até você.",
+    quote:"Você não escolheu isso. Em algum momento seu sistema emocional aprendeu que se abrir era arriscado. E a proteção que um dia te salvou é a mesma que hoje te distancia do que você mais quer.",
+    signals:["Existe um desejo de amor junto com uma descrença de que ele seja possível para você","Relacionamentos saudáveis parecem estranhos ou distantes da sua realidade","Conexões superficiais são mais fáceis — intimidade profunda ainda parece arriscada","Há uma dor mais antiga influenciando suas escolhas afetivas sem que você perceba","Chegou um momento em que entender por que isso se repete pareceu impossível"],
+    ctaTitle:"Você não precisa continuar fechada para o amor que quer.",
+    ctaBody:"Essa camada se formou por um motivo real. E ela pode se mover — não com força de vontade, mas com o olhar certo. As 7 Couraças é uma experiência de 7 dias para você começar a abrir essa porta de dentro."
+  }
+];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let inBreak = false;
+let currentBreak = null;
+
+function startQuiz(){
+  document.getElementById('intro-section').style.display='none';
+  document.getElementById('quiz-section').style.display='block';
+  render();
+}
+
+function getBreakAfter(idx){
+  return microbreaks.find(b=>b.after===idx)||null;
+}
+
+function render(){
+  if(inBreak) return renderBreak();
+  const q = questions[current];
+  const pct = Math.round(((current+1)/questions.length)*100);
+  document.getElementById('step-label').textContent = `${current+1} de ${questions.length}`;
+  document.getElementById('pct-label').textContent = pct+'%';
+  document.getElementById('progress').style.width = pct+'%';
+  document.getElementById('dim-tag').textContent = q.dim;
+  document.getElementById('question-text').textContent = q.text;
+  document.getElementById('btn-back').style.visibility = current>0?'visible':'hidden';
+
+  document.getElementById('break-card').style.display='none';
+  const qc = document.getElementById('question-card');
+  qc.style.display='block';
+  qc.className = 'card';
+  void qc.offsetWidth;
+  qc.style.animation = 'none';
+  qc.style.animation = 'fadeUp .35s ease both';
+
+  const c = document.getElementById('options-container');
+  c.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt'+(answers[current]===i?' selected':'');
+    btn.textContent=opt;
+    btn.onclick=()=>selectOpt(i);
+    c.appendChild(btn);
+  });
+  const nb=document.getElementById('btn-next');
+  nb.disabled=answers[current]===null;
+  nb.textContent=current===questions.length-1?'Ver meu resultado →':'Próxima →';
+}
+
+function renderBreak(){
+  const b = currentBreak;
+  document.getElementById('question-card').style.display='none';
+  const bc = document.getElementById('break-card');
+  bc.style.display='block';
+  document.getElementById('break-line').innerHTML = b.line.replace(/\n/g,'<br>');
+  const sub = document.getElementById('break-sub');
+  sub.textContent = b.sub||'';
+  sub.style.display = b.sub ? 'block' : 'none';
+  document.getElementById('btn-back').style.visibility='hidden';
+  const nb=document.getElementById('btn-next');
+  nb.disabled=false;
+  nb.textContent='Continuar →';
+}
+
+function selectOpt(i){answers[current]=i;render();}
+
+function goBack(){
+  if(inBreak){inBreak=false;currentBreak=null;render();return;}
+  if(current>0){current--;render();}
+}
+
+function goNext(){
+  if(inBreak){inBreak=false;currentBreak=null;current++;render();return;}
+  if(answers[current]===null)return;
+  const brk = getBreakAfter(current);
+  if(brk && current<questions.length-1){
+    inBreak=true;currentBreak=brk;renderBreak();return;
+  }
+  if(current<questions.length-1){current++;render();}
+  else showResult();
+}
+
+function showResult(){
+  const dimScores={A:0,P:0,M:0,G:0};
+  const dimMax={A:0,P:0,M:0,G:0};
+  answers.forEach((a,i)=>{
+    if(a===null)return;
+    const q=questions[i];
+    Object.keys(q.scores).forEach(k=>{
+      dimScores[k]+=q.scores[k][a];
+      dimMax[k]+=3;
+    });
+  });
+  const total=Object.values(dimScores).reduce((s,v)=>s+v,0);
+  const prof=profiles.find(p=>total>=p.min&&total<=p.max)||profiles[3];
+
+  document.getElementById('quiz-section').style.display='none';
+  const rs=document.getElementById('result-section');
+  rs.style.display='block';
+
+  const badge=document.getElementById('result-badge');
+  badge.textContent=prof.badge;
+  badge.style.background=prof.badgeBg;
+  badge.style.color=prof.badgeColor;
+  document.getElementById('result-title').textContent=prof.title;
+  document.getElementById('result-subtitle').textContent=prof.subtitle;
+  document.getElementById('narrative-quote').textContent=prof.quote;
+  document.getElementById('cta-title').textContent=prof.ctaTitle;
+  document.getElementById('cta-body').textContent=prof.ctaBody;
+  document.getElementById('print-q1').textContent=prof.print1;
+  document.getElementById('print-q2').textContent=prof.print2;
+
+  const signals=document.getElementById('signals-list');
+  signals.innerHTML='';
+  prof.signals.forEach(s=>{const li=document.createElement('li');li.textContent=s;signals.appendChild(li);});
+
+  const bars=document.getElementById('dim-bars');
+  bars.innerHTML='';
+  const dimLabels={A:"Apego ansioso · evitativo",P:"Atração por indisponíveis",M:"Medo de intimidade",G:"Autopercepção afetiva"};
+  const barColors=["#C94F78","#BA7517","#8F3600","#3B6D11"];
+  Object.keys(dimScores).forEach((k,idx)=>{
+    const pct=dimMax[k]>0?Math.round((dimScores[k]/dimMax[k])*100):0;
+    const div=document.createElement('div');
+    div.className='dim-row';
+    div.innerHTML=`<div class="dim-label-row"><span class="dim-name">${dimLabels[k]}</span><span class="dim-val">${pct}%</span></div><div class="dim-track"><div class="dim-bar" id="dbar-${k}" style="width:0%;background:${barColors[idx]}"></div></div>`;
+    bars.appendChild(div);
+  });
+  setTimeout(()=>{
+    Object.keys(dimScores).forEach(k=>{
+      const pct=dimMax[k]>0?Math.round((dimScores[k]/dimMax[k])*100):0;
+      const el=document.getElementById('dbar-'+k);
+      if(el)el.style.width=pct+'%';
+    });
+  },200);
+}
+
+function submitLead(){
+  const name=document.getElementById('lead-name').value.trim();
+  const email=document.getElementById('lead-email').value.trim();
+  if(!name||!email){alert('Preenche seu nome e e-mail para continuar.');return;}
+  const perfil=document.getElementById('result-badge').textContent||'';
+  const msg=`Olá! Acabei de fazer o diagnóstico de disponibilidade emocional.\n\n👤 Nome: ${name}\n📧 E-mail: ${email}\n📊 Perfil: ${perfil}\n\nGostaria de receber minha análise completa!`;
+  const url=`https://wa.me/5567981448229?text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+  document.getElementById('result-section').style.display='none';
+  document.getElementById('thank-section').style.display='block';
+}
+</script>
+</body>
+</html>
